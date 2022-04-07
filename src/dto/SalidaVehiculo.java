@@ -8,15 +8,18 @@ package dto;
  *
  * @author WINDOWS10PRO
  */
-public class Salida {
+public class SalidaVehiculo {
     private String placa;
 
-    public String getPlaca() {
+    public String obtenerPlaca() {
         return placa;
     }
 
-    public void setPlaca(String placa) {
+    public void modificarPlaca(String placa) {
         this.placa = placa;
     }
- 
+    public static int sumarCupo() {
+        int a = 20 + 1;
+        return a;
+    }
 }

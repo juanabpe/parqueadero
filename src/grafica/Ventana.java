@@ -4,6 +4,14 @@
  */
 package grafica;
 
+import dto.IngresoVehiculo;
+import java.awt.Color;
+import java.awt.Component;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Timer;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author WINDOWS10PRO
@@ -26,6 +34,7 @@ public class Ventana extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btg1 = new javax.swing.ButtonGroup();
         opIngreso = new javax.swing.JRadioButton();
         opSalida = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
@@ -42,17 +51,40 @@ public class Ventana extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
 
+        btg1.add(opIngreso);
         opIngreso.setText("Ingreso");
+        opIngreso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opIngresoActionPerformed(evt);
+            }
+        });
+        opIngreso.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                opIngresoKeyReleased(evt);
+            }
+        });
         getContentPane().add(opIngreso);
-        opIngreso.setBounds(40, 10, 65, 25);
+        opIngreso.setBounds(40, 10, 120, 25);
 
+        btg1.add(opSalida);
         opSalida.setText("Salida");
+        opSalida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                opSalidaActionPerformed(evt);
+            }
+        });
         getContentPane().add(opSalida);
-        opSalida.setBounds(40, 40, 57, 25);
+        opSalida.setBounds(40, 40, 120, 25);
 
         jLabel1.setText("Identificación");
         getContentPane().add(jLabel1);
         jLabel1.setBounds(50, 90, 90, 20);
+
+        cjIdentificacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cjIdentificacionActionPerformed(evt);
+            }
+        });
         getContentPane().add(cjIdentificacion);
         cjIdentificacion.setBounds(20, 120, 140, 20);
 
@@ -75,16 +107,59 @@ public class Ventana extends javax.swing.JFrame {
         cjHora.setBounds(540, 120, 120, 22);
 
         btGuardar.setText("Guardar");
+        btGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btGuardarActionPerformed(evt);
+            }
+        });
         getContentPane().add(btGuardar);
-        btGuardar.setBounds(30, 180, 75, 25);
+        btGuardar.setBounds(30, 180, 90, 25);
 
         btSalir.setText("Salir");
+        btSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSalirActionPerformed(evt);
+            }
+        });
         getContentPane().add(btSalir);
-        btSalir.setBounds(130, 180, 80, 25);
+        btSalir.setBounds(150, 180, 80, 25);
 
         setSize(new java.awt.Dimension(733, 286));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void cjIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cjIdentificacionActionPerformed
+       this.habilitar();
+    }//GEN-LAST:event_cjIdentificacionActionPerformed
+
+    private void btGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarActionPerformed
+        //JOptionPane.showMessageDialog(this, "Su vehículo se registró");
+        if(opIngreso.isSelected()){
+          this.registrarVehiculo();  
+        }else if(opSalida.isSelected())
+        this.salidaVehiculo();
+        //this.registrarVehiculo();
+    }//GEN-LAST:event_btGuardarActionPerformed
+
+    private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btSalirActionPerformed
+
+    private void opIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opIngresoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_opIngresoActionPerformed
+
+    private void opSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opSalidaActionPerformed
+        
+    }//GEN-LAST:event_opSalidaActionPerformed
+
+    private void opIngresoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_opIngresoKeyReleased
+       if(opIngreso.isSelected()){
+           cjIdentificacion.setEnabled(true);
+       }else if (opIngreso.isSelected()){
+           cjIdentificacion.setEnabled(false);
+       }
+    }//GEN-LAST:event_opIngresoKeyReleased
 
     /**
      * @param args the command line arguments
@@ -98,10 +173,35 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
     }
+    public void registrarVehiculo(){
+        String placa = cjPlaca.getText();
+        //Date fecha = cjFecha.getDate();
+        //Timer hora = cjHora.getTimer();
+        String identificacion = cjIdentificacion.getText();
+        JOptionPane.showMessageDialog(this, "Su vehículo fue registrado");
+    }
+    public void salidaVehiculo(){
+        String placa = cjPlaca.getText();
+        JOptionPane.showMessageDialog(this, "Puede retirar su vehículo");
+    }
+    public void habilitar(){
+        if(opIngreso.isSelected()){
+            cjIdentificacion.setEnabled(true);
+            cjFecha.setEnabled(true);
+            cjHora.setEnabled(true);
+        }else if (opSalida.isSelected()){
+            cjIdentificacion.setEnabled(false);
+            cjFecha.setEnabled(false);
+            cjHora.setEnabled(false);
+        }
+    }
+
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGuardar;
     private javax.swing.JButton btSalir;
+    private javax.swing.ButtonGroup btg1;
     private javax.swing.JTextField cjFecha;
     private javax.swing.JTextField cjHora;
     private javax.swing.JTextField cjIdentificacion;

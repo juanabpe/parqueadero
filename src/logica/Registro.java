@@ -4,7 +4,8 @@
  */
 package logica;
 
-import dto.Ingreso;
+import dto.IngresoVehiculo;
+import dto.SalidaVehiculo;
 import java.util.Date;
 import java.util.Timer;
 
@@ -14,14 +15,10 @@ import java.util.Timer;
  */
 public class Registro {
 
-    public Ingreso registrarVehiculo(String placa, Date fecha, Timer hora, String identificacion) {
-        if (placa == null || fecha == null || hora == null || identificacion == null || placa.isEmpty()
-                || identificacion.isEmpty()) {
-            return null;
-        } else {
-            Ingreso elVehiculo = this.registrarVehiculo(placa, fecha, hora, identificacion);
-            Ingreso c = new Ingreso(placa, fecha, hora, identificacion);
-            return c;
-        }
+    public IngresoVehiculo registrarVehiculo(String placa, Date fecha, Timer hora, String identificacion){
+        return null;
+    }
+    public SalidaVehiculo salidaVehiculo(String placa){
+        return null;
     }
 }
