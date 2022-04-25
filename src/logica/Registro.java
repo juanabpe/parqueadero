@@ -4,10 +4,9 @@
  */
 package logica;
 
-import dto.IngresoVehiculo;
-import dto.SalidaVehiculo;
+import dto.Vehiculo;
 import java.util.Date;
-import java.util.Timer;
+
 
 /**
  *
@@ -15,10 +14,12 @@ import java.util.Timer;
  */
 public class Registro {
 
-    public IngresoVehiculo registrarVehiculo(String placa, Date fecha, Timer hora, String identificacion){
-        return null;
-    }
-    public SalidaVehiculo salidaVehiculo(String placa){
-        return null;
+    public Vehiculo crearVehiculo(String placa, Date fecha, String hora, String identificacion){
+        Vehiculo v = new Vehiculo();
+        v.modificarFecha(fecha);
+        v.modificarHora(hora);
+        v.modificarIdentificacion(identificacion);
+        v.modificarPlaca(placa);
+        return v;
     }
 }

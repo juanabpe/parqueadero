@@ -4,13 +4,14 @@
  */
 package grafica;
 
-import dto.IngresoVehiculo;
-import java.awt.Color;
-import java.awt.Component;
+import dto.Vehiculo;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import logica.Registro;
+import utilidades.GArchivos;
 
 /**
  *
@@ -18,11 +19,13 @@ import javax.swing.JOptionPane;
  */
 public class Ventana extends javax.swing.JFrame {
 
+    DefaultTableModel modelo;
+
     /**
      * Creates new form Ventana
      */
     public Ventana() {
-        initComponents();
+        
     }
 
     /**
@@ -42,11 +45,13 @@ public class Ventana extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         cjPlaca = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        cjFecha = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         cjHora = new javax.swing.JTextField();
         btGuardar = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
+        cjFecha = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -97,8 +102,6 @@ public class Ventana extends javax.swing.JFrame {
         jLabel3.setText("Fecha");
         getContentPane().add(jLabel3);
         jLabel3.setBounds(420, 90, 60, 20);
-        getContentPane().add(cjFecha);
-        cjFecha.setBounds(370, 120, 130, 22);
 
         jLabel4.setText("Hora");
         getContentPane().add(jLabel4);
@@ -124,21 +127,41 @@ public class Ventana extends javax.swing.JFrame {
         getContentPane().add(btSalir);
         btSalir.setBounds(150, 180, 80, 25);
 
-        setSize(new java.awt.Dimension(733, 286));
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tabla);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(70, 220, 570, 230);
+        getContentPane().add(cjFecha);
+        cjFecha.setBounds(370, 120, 140, 20);
+
+        setSize(new java.awt.Dimension(733, 505));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cjIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cjIdentificacionActionPerformed
-       this.habilitar();
+        
     }//GEN-LAST:event_cjIdentificacionActionPerformed
 
     private void btGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarActionPerformed
         //JOptionPane.showMessageDialog(this, "Su vehículo se registró");
-        if(opIngreso.isSelected()){
-          this.registrarVehiculo();  
-        }else if(opSalida.isSelected())
-        this.salidaVehiculo();
-        //this.registrarVehiculo();
+        //Date date = jdcFecha.getDate();
+        //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        //String date = formato.format(jdcFecha.getDate());
+
+        if (opIngreso.isSelected()) {
+            this.registrarVehiculo();
+        }  
     }//GEN-LAST:event_btGuardarActionPerformed
 
     private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
@@ -150,15 +173,15 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_opIngresoActionPerformed
 
     private void opSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opSalidaActionPerformed
-        
+
     }//GEN-LAST:event_opSalidaActionPerformed
 
     private void opIngresoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_opIngresoKeyReleased
-       if(opIngreso.isSelected()){
-           cjIdentificacion.setEnabled(true);
-       }else if (opIngreso.isSelected()){
-           cjIdentificacion.setEnabled(false);
-       }
+        if (opIngreso.isSelected()) {
+            cjIdentificacion.setEnabled(true);
+        } else if (opIngreso.isSelected()) {
+            cjIdentificacion.setEnabled(false);
+        }
     }//GEN-LAST:event_opIngresoKeyReleased
 
     /**
@@ -173,36 +196,43 @@ public class Ventana extends javax.swing.JFrame {
             }
         });
     }
-    public void registrarVehiculo(){
+
+    private ArrayList listagestion = new ArrayList();
+
+    public void registrarVehiculo() {
+        Calendar calendario = Calendar.getInstance();
+        int hora = calendario.get(Calendar.HOUR_OF_DAY);
+        int minutos = calendario.get(Calendar.MINUTE);
         String placa = cjPlaca.getText();
-        //Date fecha = cjFecha.getDate();
-        //Timer hora = cjHora.getTimer();
+        Date fecha = cjFecha.getDate();
         String identificacion = cjIdentificacion.getText();
+        Registro a = new Registro();
+        Vehiculo nuevoVehiculo = new Vehiculo ();
+        nuevoVehiculo = a.crearVehiculo(placa, fecha, hora + ":" + minutos, identificacion);
+        listagestion.add(nuevoVehiculo);
+        boolean b = GArchivos.guardar("listaVehiculos.pq", listagestion);
+         ArrayList vehiculos = (ArrayList)GArchivos.leer("listaVehiculos.pq");
         JOptionPane.showMessageDialog(this, "Su vehículo fue registrado");
     }
-    public void salidaVehiculo(){
-        String placa = cjPlaca.getText();
-        JOptionPane.showMessageDialog(this, "Puede retirar su vehículo");
+    
+    private void cargarVehiculo() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Identificación");
+        modelo.addColumn("Placa");
+        modelo.addColumn("Fecha");
+        modelo.addColumn("Hora");
+        this.tabla.setModel(modelo);
+    
     }
-    public void habilitar(){
-        if(opIngreso.isSelected()){
-            cjIdentificacion.setEnabled(true);
-            cjFecha.setEnabled(true);
-            cjHora.setEnabled(true);
-        }else if (opSalida.isSelected()){
-            cjIdentificacion.setEnabled(false);
-            cjFecha.setEnabled(false);
-            cjHora.setEnabled(false);
-        }
-    }
-
+    
+        
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGuardar;
     private javax.swing.JButton btSalir;
     private javax.swing.ButtonGroup btg1;
-    private javax.swing.JTextField cjFecha;
+    private com.toedter.calendar.JDateChooser cjFecha;
     private javax.swing.JTextField cjHora;
     private javax.swing.JTextField cjIdentificacion;
     private javax.swing.JTextField cjPlaca;
@@ -210,7 +240,9 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton opIngreso;
     private javax.swing.JRadioButton opSalida;
+    private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

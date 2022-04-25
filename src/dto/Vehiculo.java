@@ -1,25 +1,20 @@
-
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package dto;
 
 import java.util.Date;
-import java.util.Timer;
 
 /**
  *
  * @author WINDOWS10PRO
  */
-public class IngresoVehiculo {
+public class Vehiculo {
     private String placa;
     private Date fecha;
-    private Timer hora;
+    private String hora;
     private String identificacion;
-
- 
-
-    public IngresoVehiculo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
 
     public String obtenerPlaca() {
         return placa;
@@ -37,11 +32,11 @@ public class IngresoVehiculo {
        this.fecha = fecha;
     }
 
-    public Timer obtenerHora() {
+    public String obtenerHora() {
         return hora;
     }
 
-    public void modificarHora(Timer hora) {
+    public void modificarHora(String hora) {
         this.hora = hora;
     }
 
@@ -53,8 +48,4 @@ public class IngresoVehiculo {
         this.identificacion = identificacion;
     }
     
-   public static int restarCupo(){
-      int c= 20-1;
-       return c;
-   }
 }
