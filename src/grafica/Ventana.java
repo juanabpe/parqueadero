@@ -25,6 +25,7 @@ public class Ventana extends javax.swing.JFrame {
      * Creates new form Ventana
      */
     public Ventana() {
+        initComponents();
         
     }
 
@@ -161,7 +162,9 @@ public class Ventana extends javax.swing.JFrame {
 
         if (opIngreso.isSelected()) {
             this.registrarVehiculo();
-        }  
+        }  else if(opSalida.isSelected()){
+            JOptionPane.showMessageDialog(this, "Puede retirar su vehiculo");
+        }
     }//GEN-LAST:event_btGuardarActionPerformed
 
     private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
