@@ -5,6 +5,7 @@
 package logica;
 
 import dto.Vehiculo;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -26,4 +27,5 @@ public class Registro {
         return v;
         }
     }
+    
 }

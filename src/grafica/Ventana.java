@@ -5,6 +5,7 @@
 package grafica;
 
 import dto.Vehiculo;
+import java.awt.event.KeyEvent;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -26,7 +27,7 @@ public class Ventana extends javax.swing.JFrame {
      */
     public Ventana() {
         initComponents();
-        
+
     }
 
     /**
@@ -50,11 +51,10 @@ public class Ventana extends javax.swing.JFrame {
         cjHora = new javax.swing.JTextField();
         btGuardar = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tabla = new javax.swing.JTable();
         cjFecha = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(102, 204, 255));
         getContentPane().setLayout(null);
 
         btg1.add(opIngreso);
@@ -68,6 +68,9 @@ public class Ventana extends javax.swing.JFrame {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 opIngresoKeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                opIngresoKeyTyped(evt);
+            }
         });
         getContentPane().add(opIngreso);
         opIngreso.setBounds(40, 10, 120, 25);
@@ -77,6 +80,11 @@ public class Ventana extends javax.swing.JFrame {
         opSalida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 opSalidaActionPerformed(evt);
+            }
+        });
+        opSalida.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                opSalidaKeyTyped(evt);
             }
         });
         getContentPane().add(opSalida);
@@ -91,12 +99,23 @@ public class Ventana extends javax.swing.JFrame {
                 cjIdentificacionActionPerformed(evt);
             }
         });
+        cjIdentificacion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cjIdentificacionKeyTyped(evt);
+            }
+        });
         getContentPane().add(cjIdentificacion);
         cjIdentificacion.setBounds(20, 120, 140, 20);
 
         jLabel2.setText("Placa");
         getContentPane().add(jLabel2);
         jLabel2.setBounds(250, 90, 60, 20);
+
+        cjPlaca.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cjPlacaKeyTyped(evt);
+            }
+        });
         getContentPane().add(cjPlaca);
         cjPlaca.setBounds(200, 120, 130, 20);
 
@@ -119,6 +138,7 @@ public class Ventana extends javax.swing.JFrame {
         getContentPane().add(btGuardar);
         btGuardar.setBounds(30, 180, 90, 25);
 
+        btSalir.setBackground(new java.awt.Color(255, 255, 255));
         btSalir.setText("Salir");
         btSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,31 +147,15 @@ public class Ventana extends javax.swing.JFrame {
         });
         getContentPane().add(btSalir);
         btSalir.setBounds(150, 180, 80, 25);
-
-        tabla.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(tabla);
-
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(70, 220, 570, 230);
         getContentPane().add(cjFecha);
         cjFecha.setBounds(370, 120, 140, 20);
 
-        setSize(new java.awt.Dimension(733, 505));
+        setSize(new java.awt.Dimension(708, 283));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cjIdentificacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cjIdentificacionActionPerformed
-        
+
     }//GEN-LAST:event_cjIdentificacionActionPerformed
 
     private void btGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarActionPerformed
@@ -162,8 +166,8 @@ public class Ventana extends javax.swing.JFrame {
 
         if (opIngreso.isSelected()) {
             this.registrarVehiculo();
-        }  else if(opSalida.isSelected()){
-            JOptionPane.showMessageDialog(this, "Puede retirar su vehiculo");
+        } else if (opSalida.isSelected()) {
+            this.retirarVehiculo();
         }
     }//GEN-LAST:event_btGuardarActionPerformed
 
@@ -172,20 +176,41 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_btSalirActionPerformed
 
     private void opIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opIngresoActionPerformed
-        // TODO add your handling code here:
+    cjIdentificacion.setEnabled(true);  
+    cjFecha.setEnabled(true);
+    cjHora.setEnabled(true);
     }//GEN-LAST:event_opIngresoActionPerformed
 
     private void opSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opSalidaActionPerformed
-
+    cjIdentificacion.setEnabled(false);  
+    cjFecha.setEnabled(false);
+    cjHora.setEnabled(false);
     }//GEN-LAST:event_opSalidaActionPerformed
 
     private void opIngresoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_opIngresoKeyReleased
-        if (opIngreso.isSelected()) {
-            cjIdentificacion.setEnabled(true);
-        } else if (opIngreso.isSelected()) {
-            cjIdentificacion.setEnabled(false);
-        }
+    cjIdentificacion.setEnabled(true);  
+    cjFecha.setEnabled(true);
+    cjHora.setEnabled(true);
     }//GEN-LAST:event_opIngresoKeyReleased
+
+    private void cjIdentificacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cjIdentificacionKeyTyped
+        verif(evt);
+    }//GEN-LAST:event_cjIdentificacionKeyTyped
+
+    private void cjPlacaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cjPlacaKeyTyped
+        if (cjPlaca.getText().length() >= 6)
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_cjPlacaKeyTyped
+
+    private void opIngresoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_opIngresoKeyTyped
+    
+    }//GEN-LAST:event_opIngresoKeyTyped
+
+    private void opSalidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_opSalidaKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_opSalidaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -200,7 +225,18 @@ public class Ventana extends javax.swing.JFrame {
         });
     }
 
-    private ArrayList listagestion = new ArrayList();
+    public void verif(KeyEvent evt) {
+        char validar = evt.getKeyChar();
+
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+
+            JOptionPane.showMessageDialog(rootPane, "Ingrese solo números");
+        }
+    }
+
+    private ArrayList listagestion = new ArrayList(20);
 
     public void registrarVehiculo() {
         Calendar calendario = Calendar.getInstance();
@@ -210,26 +246,23 @@ public class Ventana extends javax.swing.JFrame {
         Date fecha = cjFecha.getDate();
         String identificacion = cjIdentificacion.getText();
         Registro a = new Registro();
-        Vehiculo nuevoVehiculo = new Vehiculo ();
+        Vehiculo nuevoVehiculo = new Vehiculo();
         nuevoVehiculo = a.crearVehiculo(placa, fecha, hora + ":" + minutos, identificacion);
         listagestion.add(nuevoVehiculo);
         boolean b = GArchivos.guardar("listaVehiculos.pq", listagestion);
-         ArrayList vehiculos = (ArrayList)GArchivos.leer("listaVehiculos.pq");
-        JOptionPane.showMessageDialog(this, "Su vehículo fue registrado");
-    }
-    
-    private void cargarVehiculo() {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("Identificación");
-        modelo.addColumn("Placa");
-        modelo.addColumn("Fecha");
-        modelo.addColumn("Hora");
-        this.tabla.setModel(modelo);
-    
-    }
-    
+        ArrayList vehiculos = (ArrayList) GArchivos.leer("listaVehiculos.pq");
+        JOptionPane.showMessageDialog(this, "Su vehículo fue registrado ");
         
-
+    }
+    public void retirarVehiculo(){
+        String placa = cjPlaca.getText();
+        if(listagestion.contains(placa)){
+            JOptionPane.showMessageDialog(this, "Puede retirar su vehiculo");
+        }else{
+            JOptionPane.showMessageDialog(this, "Su vehiculo no se encuentra registrado");
+        }
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGuardar;
@@ -243,9 +276,7 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton opIngreso;
     private javax.swing.JRadioButton opSalida;
-    private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }
