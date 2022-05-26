@@ -27,6 +27,11 @@ public class Ventana extends javax.swing.JFrame {
      */
     public Ventana() {
         initComponents();
+        ArrayList carrosGuardados = (ArrayList) GArchivos.leer("listaVehiculos.pq");
+        if (carrosGuardados != null) {
+            listagestion = carrosGuardados;
+            cupos = cupos-listagestion.size();
+        }
 
     }
 
@@ -52,6 +57,7 @@ public class Ventana extends javax.swing.JFrame {
         btGuardar = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
         cjFecha = new com.toedter.calendar.JDateChooser();
+        btlimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 204, 255));
@@ -150,6 +156,15 @@ public class Ventana extends javax.swing.JFrame {
         getContentPane().add(cjFecha);
         cjFecha.setBounds(370, 120, 140, 20);
 
+        btlimpiar.setText("Limpiar datos");
+        btlimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btlimpiarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btlimpiar);
+        btlimpiar.setBounds(260, 180, 150, 25);
+
         setSize(new java.awt.Dimension(708, 283));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
@@ -159,38 +174,35 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_cjIdentificacionActionPerformed
 
     private void btGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarActionPerformed
-        //JOptionPane.showMessageDialog(this, "Su vehículo se registró");
-        //Date date = jdcFecha.getDate();
-        //SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-        //String date = formato.format(jdcFecha.getDate());
 
         if (opIngreso.isSelected()) {
             this.registrarVehiculo();
-        } else if (opSalida.isSelected()) {
-            this.retirarVehiculo();
         }
     }//GEN-LAST:event_btGuardarActionPerformed
 
     private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
-        System.exit(0);
+        if (opSalida.isSelected()) {
+            placausuario = cjPlaca.getText();
+            this.retirarVehiculo();
+        }
     }//GEN-LAST:event_btSalirActionPerformed
 
     private void opIngresoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opIngresoActionPerformed
-    cjIdentificacion.setEnabled(true);  
-    cjFecha.setEnabled(true);
-    cjHora.setEnabled(true);
+        cjIdentificacion.setEnabled(true);
+        cjFecha.setEnabled(true);
+        cjHora.setEnabled(true);
     }//GEN-LAST:event_opIngresoActionPerformed
 
     private void opSalidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opSalidaActionPerformed
-    cjIdentificacion.setEnabled(false);  
-    cjFecha.setEnabled(false);
-    cjHora.setEnabled(false);
+        cjIdentificacion.setEnabled(false);
+        cjFecha.setEnabled(false);
+        cjHora.setEnabled(false);
     }//GEN-LAST:event_opSalidaActionPerformed
 
     private void opIngresoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_opIngresoKeyReleased
-    cjIdentificacion.setEnabled(true);  
-    cjFecha.setEnabled(true);
-    cjHora.setEnabled(true);
+        cjIdentificacion.setEnabled(true);
+        cjFecha.setEnabled(true);
+        cjHora.setEnabled(true);
     }//GEN-LAST:event_opIngresoKeyReleased
 
     private void cjIdentificacionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cjIdentificacionKeyTyped
@@ -198,19 +210,26 @@ public class Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_cjIdentificacionKeyTyped
 
     private void cjPlacaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cjPlacaKeyTyped
-        if (cjPlaca.getText().length() >= 6)
-        {
+        if (cjPlaca.getText().length() >= 6) {
             evt.consume();
         }
     }//GEN-LAST:event_cjPlacaKeyTyped
 
     private void opIngresoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_opIngresoKeyTyped
-    
+
     }//GEN-LAST:event_opIngresoKeyTyped
 
     private void opSalidaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_opSalidaKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_opSalidaKeyTyped
+
+    private void btlimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btlimpiarActionPerformed
+        cjIdentificacion.setText(null);
+        cjFecha.setDate(null);
+        cjHora.setText(null);
+        cjPlaca.setText(null);
+
+    }//GEN-LAST:event_btlimpiarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -247,27 +266,43 @@ public class Ventana extends javax.swing.JFrame {
         String identificacion = cjIdentificacion.getText();
         Registro a = new Registro();
         Vehiculo nuevoVehiculo = new Vehiculo();
+        if(cupos>0){
         nuevoVehiculo = a.crearVehiculo(placa, fecha, hora + ":" + minutos, identificacion);
         listagestion.add(nuevoVehiculo);
         boolean b = GArchivos.guardar("listaVehiculos.pq", listagestion);
-        ArrayList vehiculos = (ArrayList) GArchivos.leer("listaVehiculos.pq");
+        cupos-=1;
         JOptionPane.showMessageDialog(this, "Su vehículo fue registrado ");
-        
-    }
-    public void retirarVehiculo(){
-        String placa = cjPlaca.getText();
-        if(listagestion.contains(placa)){
-            JOptionPane.showMessageDialog(this, "Puede retirar su vehiculo");
         }else{
-            JOptionPane.showMessageDialog(this, "Su vehiculo no se encuentra registrado");
+            JOptionPane.showMessageDialog(this, "No hay cupos disponibles ");
         }
     }
-    
+
+    private String placausuario = new String();
+
+    public void retirarVehiculo() {
+        listagestion = (ArrayList) GArchivos.leer("listaVehiculos.pq");
+        String placa = cjPlaca.getText();
+        Vehiculo salida = new Vehiculo();
+        for (int i = 0; i < listagestion.size(); i++) {
+            salida = (Vehiculo) listagestion.get(i);
+            if (placausuario.equals(salida.obtenerPlaca())) {
+                listagestion.remove(i);
+                boolean b = GArchivos.guardar("listaVehiculos.pq", listagestion);
+                cupos+=1;
+                JOptionPane.showMessageDialog(this, "Puede retirar su vehiculo");
+                return;
+            }
+        }
+        JOptionPane.showMessageDialog(this, "Su vehiculo no esta registrado");
+    }
+    private Integer cupos = 20;
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btGuardar;
     private javax.swing.JButton btSalir;
     private javax.swing.ButtonGroup btg1;
+    private javax.swing.JButton btlimpiar;
     private com.toedter.calendar.JDateChooser cjFecha;
     private javax.swing.JTextField cjHora;
     private javax.swing.JTextField cjIdentificacion;

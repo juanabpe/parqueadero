@@ -4,6 +4,7 @@
  */
 package dto;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -11,7 +12,7 @@ import java.util.Date;
  *
  * @author WINDOWS10PRO
  */
-public class Vehiculo {
+public class Vehiculo implements Serializable{
     private String placa;
     private Date fecha;
     private String hora;
